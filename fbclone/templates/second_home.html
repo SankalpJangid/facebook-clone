@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if user.is_authenticated %}
+        <h1>{{user}}</h1>
+    {% endif %}
+    <h1>Friend requests</h1>
+    {% for friend in request_check %}
+        <a href="{% url 'accept_friend' friend.sender.id %}"><h3>{{friend.sender}}  {{friend.sender.id}}  {{friend.id}}</h3></a>
+    {% endfor %}
+    <h2>other Users</h2>
+    {% for user in alluser %}
+        <a href="{% url 'add_friend' user.id %}"><h5>{{user}}</h5></a>
+    {% endfor %}
+    <h1>Friends</h1>
+    {% for fr in friendssss %}
+        <h3>{{fr}}</h3>
+    {% endfor %}
+</body>
+</html>

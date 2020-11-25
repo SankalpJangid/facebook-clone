@@ -1,0 +1,241 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
+  <title>Hello, world!</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <a class="navbar-brand mx-3" style="color: azure;" href="/">Facebook</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <form class="form-inline my-2 my-lg-0" method='get' action="/search">
+      <input class="form-control mr-sm-2 px-5" type="search" placeholder="Search" aria-label="Search" name="search"
+        id="search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+        <li class="nav-item active">
+          <a class="nav-link" style="color: azure;" href="#">Hello, <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item dropdown">
+        {% for user in user_image %}
+        <div style="display:flex;">
+          <img src="{{user.img.url}}" alt="image" class="user-image-class rounded d-block my-2">
+        {% endfor %}
+          <a class="nav-link dropdown-toggle" style="color: azure;" href="#" id="navbarDropdown" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{user.username}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+            <a class="dropdown-item" href="/logout">logout</a>
+            <a class="dropdown-item" href="#">Another action</a>
+          </div>
+        </li>
+        {% endif %}
+        <li class="nav-item active">
+          <a class="nav-link" style="color: azure;" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="color: azure;" href="/friendRequest">Requests</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" style="color: azure;" href="/notification">
+          Notification({{notification_number}})
+        </a>
+      </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" style="color: azure;" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+
+    </div>
+  </nav>
+  {% load humanize %}
+  {% load extra %}
+
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert" style="
+    margin-top: 60px;
+">
+  <strong>Message: </strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+{% for data in profile %}
+  <div>
+    <img src="{{data.cover_image.url}}" alt=""
+      style="width:100%; z-index:-1; margin-bottom:-230px; position:sticky; height:700px;">
+  </div>
+  <div class="jumbo" style="margin-top: 80px;
+    align-items: center;
+    margin-left: 50px;
+    margin-right: 50px;
+    background-color: #e2e2e3;
+    padding:20px;
+    border: 1px solid silver;">
+
+
+    <div style="display:flex; border: 1px solid">
+      ` <a href="{{data.img.url}}"><img src="{{data.img.url}}" alt="..." class="user-image rounded d-block my-2"></a>
+      <h3 class="font-italic"
+        style="margin-top: 20px; margin-left: 20px; margin-bottom:33px; border-bottom:1px solid silver">{{data.user}}
+      </h3>
+        {% if current_user in check_friend_request and user not in check_friend %}
+          <button
+              style="margin-left:170px; height:38px; margin-top:23px;" class="btn btn-primary">Friend
+              Request sent
+          </button>
+        {% elif user not in check_friend%}
+          <a href="{% url 'add_friend' data.user.id %}">
+          <button
+              style="margin-left:170px; height:38px; margin-top:23px;" class="btn btn-danger">Send Friend
+              Request
+          </button>
+          </a>
+        {% else %}
+          <button
+              style="margin-left:170px; height:38px; margin-top:23px;" class="btn btn-info">Your Friend
+          </button>
+        {% endif %}
+    </div>
+
+    {% endfor %}
+
+  </div>
+
+  <div class="checkout">
+
+    <div class="checkout__right" style="padding-right:10%;">
+      <h5 class="checkout_title"></h5>
+      <h2 class="checkout__name">Friends</h2>
+      <ul class="other_option">
+        <div style="display:flex; "><hr>
+        <div>
+        {% for pic in profile_pic %}
+          <img src="{{pic.img.url}}" alt="" class="user-image-class-friend-pic rounded d-block my-2 rounded-circle">
+        {% endfor %}
+        </div>
+        <div>
+        {% for fr in new_friends %}
+            <a href="afterSearch/{{fr.id}}"><h4 style="padding-left:10px; padding-top:12px;">{{fr}}</h4></a>
+        {% endfor %}
+        </div>
+      </ul>
+    </div>
+    <div class="checkout_left">
+      <div>
+        <h3 style="margin-top: 80px;">POSTS
+          <hr>
+        </h3>
+      </div>
+      {% for po in alldata %}
+      <div class="card my-5" style="width: 20rem;">
+        <img src="{{po.post_image.url}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <p class="card-text">{{po.post_title}}</p>
+          <hr>
+          <a href="{% url 'likes' po.sno id %}">
+          <button class="btn btn-primary btn-sm mr-2" type="button">Like:{{po.post_likes.count}}</button>
+          </a>
+          <button class="btn btn-primary btn-sm mr-2 share" type="button">share</button>
+          <a href="{% url 'comment' po.sno %}">
+          <button class="btn btn-primary btn-sm mr-2" type="button">
+            Comments:
+          </button>
+          </a>
+          <p class="mt-2">liked by
+            <b>{{ po.post_likes.all|join:", "  }}</b>
+            </p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+
+
+  </div>
+
+  <!-- Optional JavaScript; choose one of the two! -->
+
+  <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+    crossorigin="anonymous"></script>
+    
+
+  <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+    -->
+
+  <style>
+    @media screen and (max-width: 1024px) {
+      img.user-image {
+        width: 50px;
+        float: left;
+      }
+    }
+
+    @media screen and (min-width:1025px) and (max-width: 1280px) {
+      img.user-image {
+        width: 50px;
+      }
+    }
+
+    @media screen and (min-width: 1081px) {
+      img.user-image {
+        width: 50px;
+      }
+    }
+
+    img.user-image {
+      height: auto;
+    }
+    @media screen and ( max-width: 1024px ) {
+    img.user-image-class { width: 20px; float:left;}
+    }
+    @media screen and ( min-width:1025px ) and ( max-width: 1280px ) {
+    img.user-image-class { width: 20px; }
+    }
+    @media screen and ( min-width: 1081px ) {
+    img.user-image-class { width: 20px; }
+    }
+    img.user-image-class { height: auto; }
+
+    @media screen and ( max-width: 1024px ) {
+    img.user-image-class-friend-pic { width: 40px; float:left;}
+    }
+    @media screen and ( min-width:1025px ) and ( max-width: 1280px ) {
+    img.user-image-class-friend-pic { width: 40px; }
+    }
+    @media screen and ( min-width: 1081px ) {
+    img.user-image-class-friend-pic { width: 40px; }
+    }
+    img.user-image-class-friend-pic { height: 40px; }
+  </style>
+</body>
+
+</html>

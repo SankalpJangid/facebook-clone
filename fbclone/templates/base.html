@@ -1,0 +1,140 @@
+{% extends 'allbasefile.html' %}
+{% block body %}
+
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+  <strong>Message: </strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+<div class="checkout">
+  <div class="checkout__right" style="padding:5%;">
+    <h5 class="checkout_title">menu</h5>
+    <h2 class="checkout__name">Chat</h2>
+    <ul class="other_option">
+      <a href="#">hi</a><br>
+      <a href="#">hi</a><br>
+      <a href="#">hi</a><br>
+      {% comment %} <a href="#">{{message_receiving}} {{message_receiving.message_field}} {{message_receiving.message_sender}}</a><br> {% endcomment %}
+    </ul>
+  </div>
+  <div class="checkout_left" style="
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    overscroll-behavior: none;
+">
+    <div>
+      <h3 style="margin-top: 80px;">Community POSTS<hr></h3>
+    </div>
+    {% comment %} 
+    <div class="card my-5" style="width: 20rem;">
+        <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" class="card-img-top" alt="...">
+        <div class="card-body">
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p><hr>
+          <a href="#" class="option">Like</a>
+          <a href="#" class="option">share</a>
+          <a href="#" class="option">comment</a>
+        </div>
+    </div>
+
+    <div class="card my-5" style="width: 20rem;">
+        <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" class="card-img-top" alt="...">
+        <div class="card-body">
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p><hr>
+          <a href="#" class="option">Like</a>
+          <a href="#" class="option">share</a>
+          <a href="#" class="option">comment</a>
+        </div>
+    </div> {% endcomment %}
+    {% for data in my_generated_post_list %}
+    <div class="card my-5" style="width: 20rem;"> 
+          <div class="container">
+          <h6 style="border-bottom:1px solid silver; padding-bottom:5px"><small>Posted by</small></h6>
+          </div>
+          <div class="container" style="display:flex">
+          {% for image in my_data_profile_pic %}
+            {% if image.user == data.post_user%}
+              <img src="{{image.img.url}}" alt="" class="user-image-class rounded d-block my-2">
+            {% endif %}
+          {% endfor %}
+        <a href="{% url 'afterSearch' data.post_user.id %}" class="text-dark"><h3 style="margin-top:8px">{{data.post_user}}</h3></a>
+        </div>  
+        <img src="{{data.post_image.url}}" class="card-img-top" alt="...">
+        
+          <div class="card-body">
+            <p class="card-text">{{data.post_title}}</p><hr>
+            <a href="{% url 'common_like' data.sno %}">
+            <button class="btn btn-primary btn-sm mr-2 like-button" type="button">Like: {{data.post_likes.count}}</button>
+            </a>
+            <button class="btn btn-primary btn-sm mr-2 share" type="button">share</button>
+            <a href="{% url 'comment' data.sno %}">
+            <button class="btn btn-primary btn-sm mr-2" type="button">
+              Comments:
+            </button>
+            </a>
+            <p class="mt-2">liked by
+            <b>{{ data.post_likes.all|join:", "  }}</b>
+            </p>
+            
+          </div>
+    </div>
+      
+    {% endfor %} 
+  </div>
+  <div class="checkout__ri" style="
+    height: 76vh;
+    overflow-y: auto;
+">
+    <h5 class="checkout_title">menu</h5>
+    <h2 class="checkout__name">Friends</h2>
+    <ul class="other_options">
+    <div style="display:flex; "><hr>
+    <div>
+    {% for pic in profile_pic %}
+      <img src="{{pic.img.url}}" alt="" class="user-image-class rounded d-block my-2 rounded-circle">
+    {% endfor %}
+    </div>
+    <div>
+    {% for fr in new_friends %}
+        <a href="afterSearch/{{fr.id}}"><h4 style="padding-left:10px; padding-top:8px;">{{fr}}</a><a href="chat/{{fr.id}}"><button class="btn-sm btn btn-primary" type="button" style="margin-left:10px;">chat</button></a></h4>
+          {% comment %} <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Button
+          </button>
+          <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+      </div> {% endcomment %}
+    {% comment %} </div> {% endcomment %}
+    {% endfor %}
+    </div>
+    <hr>
+    </div>
+      {% comment %} {% for fr in new_friends %}
+          <a href="afterSearch/{{fr.id}}"><h3>{{fr}}</h3></a><hr>
+      {% endfor %} {% endcomment %}
+    </ul>
+    
+  </div>
+
+ 
+</div>
+
+<style>
+@media screen and ( max-width: 1024px ) {
+img.user-image-class { width: 40px; float:left;}
+}
+@media screen and ( min-width:1025px ) and ( max-width: 1280px ) {
+img.user-image-class { width: 40px; }
+}
+@media screen and ( min-width: 1081px ) {
+img.user-image-class { width: 40px; }
+}
+img.user-image-class { height: 40px; }
+</style>
+
+{% endblock body %}
+  </body>
+</html>

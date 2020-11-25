@@ -1,0 +1,12 @@
+{% extends 'allbasefile.html' %}
+{% block body %}
+    <div style="margin-top: 100px; margin-left: 400px;">
+        <h1 style="margin-bottom:20px;">Friend Requests:</h1>
+        {% for friend in request_check %}
+            {% if friend.sender not in check_friend %}
+                <a href="{% url 'accept_friend' friend.sender.id %}"><button class ="btn btn-info">accept {{friend.sender}} request</button></a><br><br>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock body %}
+

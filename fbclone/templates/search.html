@@ -1,0 +1,40 @@
+{% extends 'allbasefile.html' %}
+{% block body %}
+
+{% if username|length == 0 %}
+    <div class="container" style="margin-top:100px">
+        <p><h2><b>No Search Result Found</b></h2><br>
+        <h5>your search: <b><u>{{query}}</u></b> did not match any User.</h5>
+        </p>
+    </div>
+{% endif %}
+      <div class="container" style="display:flex; margin-top:100px; text-align:center;"><hr>
+      <div>
+      {% for pic in profile %}
+        <img src="{{pic.img.url}}" alt="" class="user-image-class rounded d-block my-2"><hr>
+      {% endfor %}
+      </div>
+      <div>
+      {% for user in username %}
+          <h1 style="margin-right: 200px;margin-left: 0px; padding:13px; margin-top:5px; margin-bottom:15px;"><a href="afterSearch/{{user.id}}" class="text-dark">{{user}}</a></h1>
+      {% endfor %}
+      </div>
+
+      <hr>
+      </div>
+
+<style>
+@media screen and ( max-width: 1024px ) {
+img.user-image-class { width: 45px; float:left;}
+}
+@media screen and ( min-width:1025px ) and ( max-width: 1280px ) {
+img.user-image-class { width: 45px; }
+}
+@media screen and ( min-width: 1081px ) {
+img.user-image-class { width: 45px; }
+}
+img.user-image-class { height: auto; }
+</style>
+{% endblock body %}
+  </body>
+</html>

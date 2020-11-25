@@ -1,0 +1,153 @@
+{% extends 'allbasefile.html' %}
+{% block body %}
+
+{% for data in alldata %}
+<div>
+    <a href="{{data.cover_image.url}}"><img src="{{data.cover_image.url}}" alt="" style="width:100%; z-index:-1; margin-bottom:-250px; position:sticky; height:700px;"></a>
+</div>
+<div class="jumbo" style="margin-top: 80px;
+    align-items: center;
+    margin-left: 50px;
+    margin-right: 50px;
+    background-color: #e2e2e3;
+    padding:20px;
+    border: 1px solid silver;">
+
+<div style="display:flex; border: 1px solid">
+    <a href="{{data.img.url}}"><img src="{{data.img.url}}" alt="..." class="user-image-class rounded d-block my-2"></a><h3 class="font-italic" style="margin-top: 20px; margin-left: 20px; margin-bottom:33px; border-bottom:1px solid silver">{{user.username}}</h3>
+</div>
+
+
+<div style="display:flex;">
+      <div class="container my-3">
+      <p>
+        <button class="btn btn-light btn-sm" type="button" data-toggle="collapse" data-target="#update_profile_pic" aria-expanded="false" aria-controls="update_profile_pic">
+          Update Profile Picture
+        </button>
+      </p>
+      <div class="collapse" id="update_profile_pic">
+        <div class="card card-body" style="width:100%;">
+          <form action="profile_update/{{data.sno}}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="file" name="myfile" id="myfile"><br>
+          <button class="btn btn-primary" type="submit" name="update" style="margin-bottom:5px; margin-top:5px;">Update Profile Image</button><hr>
+        </form>
+        </div>
+      </div>
+      </div>
+
+
+      <div class="container my-3">
+      <p>
+        <button class="btn btn-light btn-sm" type="button" data-toggle="collapse" data-target="#update_cover_pic" aria-expanded="false" aria-controls="update_cover_pic">
+          Update Cover Picture
+        </button>
+      </p>
+      <div class="collapse" id="update_cover_pic">
+        <div class="card card-body" style="width:100%;">
+          <form action="cover_update/{{data.sno}}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="file" name="cover_file" id="cover_file"><br>
+          <button class="btn btn-primary" type="submit" name="update" style="margin-bottom:5px; margin-top:5px;">Update Cover</button><hr>
+        </form>
+        </div>
+      </div>
+      </div>
+
+</div>
+{% endfor %}
+
+     
+<form action="" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+  <h1>Add Your Post</h1>
+  <textarea name="post_title" id="post_title" cols="150" rows="2" placeholder="type your post here" Required></textarea>
+  <h2>Add Image</h2>
+  <input type="file" name="post_image" id="post_image" Required><br><hr>
+  <button type="submit" class="btn btn-primary">Post</button>
+</form>
+</div>
+
+<div class="checkout">
+    
+  <div class="checkout__right" style="padding-right:10%;">
+    <h5 class="checkout_title">Your</h5>
+    <h2 class="checkout__name">Friends</h2>
+    <ul class="other_option">
+      <div style="display:flex; "><hr>
+        <div>
+        {% for pic in profile_pic %}
+          <img src="{{pic.img.url}}" alt="" class="user-image-class-friend-pic rounded d-block mt-3 rounded-circle"><br>
+        {% endfor %}
+        </div>
+        <div>
+        {% for fr in new_friends %}
+            <a href="afterSearch/{{fr.id}}"><h4 style="padding-left:10px; padding-top:12px">{{fr}}</h4></a><a href="remove_friend/{{fr.id}}"><button class="btn btn-sm btn-danger" style="margin-left:10px">Remove</button></a>
+        {% endfor %}
+        </div>
+        <hr>
+        </div>
+    </ul>
+  </div>
+  <div class="checkout_left">
+    <div>
+      <h3 style="margin-top: 80px;">Your POSTS<hr></h3>
+    </div>
+    {% for post in post_data %}
+    <div class="card my-5" style="width: 20rem;">
+          <img src="{{post.post_image.url}}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <p class="card-text">{{post.post_title}}</p><hr>
+            <a href="{% url 'self_like' post.sno %}">
+            <button class="btn btn-primary btn-sm mr-2" type="button">Like: {{post.post_likes.count}}</button>
+            </a>
+            <button class="btn btn-primary btn-sm mr-2" type="button">share</button>
+            <a href="{% url 'comment' post.sno %}">
+            <button class="btn btn-primary btn-sm mr-2" type="button">
+              Comments:
+            </button>
+            </a>
+            <p class="mt-2">liked by
+            <b>{{ post.post_likes.all|join:", "  }}</b>
+            </p>
+            
+          </div>
+        <a href="delete/{{post.sno}}" class="btn btn-danger btn-sm">Delete Post</a>
+    </div>
+    
+    {% endfor %}
+
+  
+</div>
+
+
+<style>
+@media screen and ( max-width: 1024px ) {
+img.user-image-class { width: 50px; float:left;}
+}
+@media screen and ( min-width:1025px ) and ( max-width: 1280px ) {
+img.user-image-class { width: 50px; }
+}
+@media screen and ( min-width: 1081px ) {
+img.user-image-class { width: 50px; }
+}
+img.user-image { height: auto; }
+@media screen-class and (max-width: 1280px) and (min-width: 1025px)
+div.card {
+    width: 100%;
+}
+@media screen and ( max-width: 1024px ) {
+img.user-image-class-friend-pic { width: 40px; float:left;}
+}
+@media screen and ( min-width:1025px ) and ( max-width: 1280px ) {
+img.user-image-class-friend-pic { width: 40px; }
+}
+@media screen and ( min-width: 1081px ) {
+img.user-image-class-friend-pic { width: 40px; }
+}
+img.user-image-class-friend-pic { height: 40px; }
+</style>
+</style>
+{% endblock body %}
+  </body>
+</html>
