@@ -9,7 +9,9 @@ For Runnning the Chat ability of app you can install channel redis
 to install channels_redis write "python3 -m pip install channels_redis"
      
 After successfully install of channel_redis
-     Run redis server on docker
-     to run the redis server write "docker run -p 6379:6379 -d redis:5"
+
+Start redis server on docker
+
+to run the redis server write "docker run -p 6379:6379 -d redis:5"
      
 
