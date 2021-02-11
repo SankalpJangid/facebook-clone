@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.6.8-fix/jquery.nicescroll.min.js"></script>
+    <link rel="stylesheet" href="{% static 'chat.css' %}">
+    <title>Document</title>
+</head>
+<body>
+
+<div class="container">
+<div class="content container-fluid bootstrap snippets bootdey">
+      <div class="row row-broken">
+        <div class="col-sm-9 col-xs-12 chat" style="overflow: scroll; outline: none;" tabindex="5001">
+          <div class="col-inside-lg decor-default">
+            <div class="chat-body">
+              <h6>{{username}}</h6>
+              <ul id="chat-log">
+                <li class="answer right">
+                    <img src="https://cdn.jpegmini.com/user/images/slider_puffin_before_mobile.jpg" alt="img" style="width:60px;"/>
+                    <p>how are you</p>
+                </li>
+                <li class="answer left">
+                    <img src="https://cdn.jpegmini.com/user/images/slider_puffin_before_mobile.jpg" alt="img" style="width:60px;"/>
+                    <p>fine</p>
+                </li>
+              </ul>
+              
+                
+              
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <input placeholder="Write a message" id="chat-message-input">
+    <input id="chat-message-submit" type="button" value="Send">
+ </div>
+
+ <script src="{% static 'reconnecting-websocket.js' %}"></script>
+ <script>
+        var roomName = {{ room_name_json }};
+        var username = {{ username }};
+
+        const chatSocket = new ReconnectingWebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + roomName
+            + '/'
+        );
+
+        chatSocket.onopen = function(e){
+          fetchMessages();
+        }
+
+        chatSocket.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            if (data['command'] === 'messages') {
+              for (let i=0; i<data['messages'].length; i++){
+                createMessage(data['messages'][i]);
+              }
+            } else if (data['command'] === 'new_message'){
+              createMessage(data['message']);
+            }
+        };
+
+        function createMessage(data){
+            var author = data['author'];
+            var msgListTag = document.createElement('li');
+            var imgTag = document.createElement('img');
+            var pTag = document.createElement('p');
+            pTag.textContent = data.content;
+            imgTag.src = 'https://cdn.jpegmini.com/user/images/slider_puffin_before_mobile.jpg';
+
+            if (author === username){
+                msgListTag.className = 'answer right';
+            } else {
+                msgListTag.className = 'answer left';
+            }
+            msgListTag.appendChild(imgTag);
+            msgListTag.appendChild(pTag);
+            document.querySelector('#chat-log').appendChild(msgListTag);
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'command': 'new_messages',
+                'from': username
+            }));
+            messageInputDom.value = '';
+        };
+
+        function fetchMessages(){
+          chatSocket.send(JSON.stringify({'command': 'fetch_messages'}));
+        }
+
+
+ </script>
+ 
+</body>
+</html>

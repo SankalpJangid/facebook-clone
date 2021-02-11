@@ -1,0 +1,254 @@
+{% load static %}
+<!DOCTYPE html><html class=''>
+<head><script src='//production-assets.codepen.io/assets/editor/live/console_runner-079c09a0e3b9ff743e39ee2d5637b9216b3545af0de366d4b9aad9dc87e26bfd.js'></script><script src='//production-assets.codepen.io/assets/editor/live/events_runner-73716630c22bbc8cff4bd0f07b135f00a0bdc5d14629260c3ec49e5606f98fdd.js'></script><script src='//production-assets.codepen.io/assets/editor/live/css_live_reload_init-2c0dc5167d60a5af3ee189d570b1835129687ea2a61bee3513dee3a50c115a77.js'></script><meta charset='UTF-8'><meta name="robots" content="noindex"><link rel="shortcut icon" type="image/x-icon" href="//production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" /><link rel="mask-icon" type="" href="//production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" /><link rel="canonical" href="https://codepen.io/emilcarlsson/pen/ZOQZaV?limit=all&page=74&q=contact+" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'>
+
+<script src="https://use.typekit.net/hoy3lrg.js"></script>
+<script>try{Typekit.load({ async: true });}catch(e){}</script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'><link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+
+</head><body>
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
+    <title>Hello, world!</title>
+  </head>
+<body>
+{% load humanize %}
+{% load extra %}
+<nav class="navbar navbar-expand-lg fixed-top">
+  <a class="navbar-brand mx-3" style="color: azure;" href="/">Facebook</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <form class="form-inline my-2 my-lg-0" method='get' action="/search">
+    <input class="form-control mr-sm-2 px-5" type="search" placeholder="Search" aria-label="Search" name="search" id="search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  </form>
+
+  <div class="collapse navbar-collapse " id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+    {% if user.is_authenticated %}
+      <li class="nav-item active">
+        <a class="nav-link" style="color: azure;" href="/">Hello, <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+      {% for user in user_image %}
+      <div style="display:flex;">
+        <img src="{{user.img.url}}" alt="image" class="user-image-class rounded d-block my-2">
+      {% endfor %}
+        <a class="nav-link dropdown-toggle" style="color: azure;" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{user.username}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/profile">Profile</a>
+          <a class="dropdown-item" href="#">Change Password</a>
+          <a class="dropdown-item" href="logout">logout</a>
+        </div>
+      </li>
+    {% endif %}
+      <li class="nav-item active">
+        <a class="nav-link" style="color: azure;" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="color: azure;" href="/friendRequest">Requests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="color: azure;" href="/notification">
+          Notification({{notification_number}})
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" style="color: azure;" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+      </li>
+    </ul>
+    
+  </div>
+</nav>
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+  <strong>Message: </strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+
+<div class="container" style="border:2px solid black; margin-top:70px;">
+    <div class="content">
+		<div class="contact-profile">
+			<div class="social-media">
+
+         <a class="btn btn-primary mx-3" href={% url 'index' %}>Close</a>
+			</div>
+		</div>
+		<div class="messages" id="auto-scroll" style="height:60vh; overflow-y:auto;">
+			<ul id="chat-log" style="list-style-type: none;">
+				<li class="sent" style="float:right; border:2px solid black; padding:10px; margin-bottom:10px; border-radius: 25px; background: #435f7a;">
+					<img src="http://emilcarlsson.se/assets/mikeross.png" class="our-image rounded d-block rounded-circle" style="float:right" alt="" />
+					<p style="color:white;">How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
+				</li>
+				<li class="replies" style="float:left; border:2px solid black; padding:10px; margin-top:10px; margin-bottom:10px; border-radius: 25px; background: #435f7a;">
+					<img src="http://emilcarlsson.se/assets/harveyspecter.png" class="our-image rounded d-block rounded-circle" style="float:left; margin-right:15px" alt="" />
+					<p style="color:white;">When you're backed against the wall, break the god damn thing down.</p>
+				</li>
+			</ul>
+		</div>
+    <div class="message-input">
+			<div class="wrap">
+			<input placeholder="Write your message..." id="chat-message-input" style="width:100%;">
+      <input id="chat-message-submit" type="button" value="Send" style="width:100%;">
+			</div>
+		</div>
+		
+	</div>
+    
+</div>
+</div>
+
+<style>
+   .sent{
+     float:right; border:2px solid black; padding:10px; margin-bottom:10px; border-radius: 25px; background: #435f7a;
+   }
+   .replies{
+     float:left; border:2px solid black; padding:10px; margin-top:10px; margin-bottom:10px; border-radius: 25px; background: #435f7a;
+   }
+   .p{
+     color:white;
+   }
+   .img{
+     width:50px;
+     height:auto;
+   }
+</style>
+
+<style>
+    @media screen and ( max-width: 1024px ) {
+    img.user-image { width: 50px; float:left;}
+    }
+    @media screen and ( min-width:1025px ) and ( max-width: 1280px ) {
+    img.user-image { width: 50px; }
+    }
+    @media screen and ( min-width: 1081px ) {
+    img.user-image { width: 50px; }
+    }
+    img.user-image { height: auto; }
+
+    @media screen and ( max-width: 1024px ) {
+    img.our-image { width: 50px;}
+    }
+    @media screen and ( min-width:1025px ) and ( max-width: 1280px ) {
+    img.our-image { width: 50px; }
+    }
+    @media screen and ( min-width: 1081px ) {
+    img.our-image { width: 50px; }
+    }
+    img.our-image { height: auto; }
+</style>
+
+
+<script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script><script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+<script src="{% static 'reconnecting-websocket.js' %}"></script>
+ <script>
+        var roomName = {{ room_name_json }};
+        var username = {{ username }};
+
+        const chatSocket = new ReconnectingWebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + roomName
+            + '/'
+        );
+
+        chatSocket.onopen = function(e){
+          fetchMessages();
+        }
+
+        chatSocket.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            if (data['command'] === 'messages') {
+              for (let i=0; i<data['messages'].length; i++){
+                createMessage(data['messages'][i]);
+              }
+            } else if (data['command'] === 'new_message'){
+              createMessage(data['message']);
+            }
+        };
+
+        function createMessage(data){
+            var author = data['author'];
+            var msgListTag = document.createElement('li');
+            var imgTag = document.createElement('img');
+            var pTag = document.createElement('p');
+            var jTag = document.createElement('H6');
+            pTag.textContent = data.content;
+            console.log(author)
+            
+
+            if (author === username){
+                imgTag.src = 'https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png';
+                msgListTag.className = 'sent';
+            } else {
+                jTag.textContent = "by " + author
+                imgTag.src = 'https://cdn.jpegmini.com/user/images/slider_puffin_before_mobile.jpg';
+                msgListTag.className = 'replies';
+            }
+            msgListTag.appendChild(imgTag);
+            msgListTag.appendChild(pTag);
+            msgListTag.appendChild(jTag);
+            document.querySelector('#chat-log').appendChild(msgListTag);
+            var elem = document.getElementById('auto-scroll');
+            elem.scrollTop = elem.scrollHeight;
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'command': 'new_messages',
+                'from': username
+            }));
+            messageInputDom.value = '';
+        };
+
+        function fetchMessages(){
+          chatSocket.send(JSON.stringify({'command': 'fetch_messages'}));
+        }
+
+
+ </script>
+</body>
+{% comment %} imgTag.src = 'https://cdn.jpegmini.com/user/images/slider_puffin_before_mobile.jpg';
+imgTag.src = 'https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png'; {% endcomment %}
+
+</html>
