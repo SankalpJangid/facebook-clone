@@ -13,5 +13,9 @@ After successfully install of channel_redis
 Start redis server on docker
 
 to run the redis server write "docker run -p 6379:6379 -d redis:5"
+
+It Start Redis server on port 6379
+
+And you can use it
      
 
