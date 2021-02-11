@@ -61,7 +61,7 @@
 <form action="" method="post" enctype="multipart/form-data">
 {% csrf_token %}
   <h1>Add Your Post</h1>
-  <textarea name="post_title" id="post_title" cols="150" rows="2" placeholder="type your post here" Required></textarea>
+  <textarea name="post_title" id="post_title" cols="150" rows="2" placeholder="type your post here"  Required></textarea>
   <h2>Add Image</h2>
   <input type="file" name="post_image" id="post_image" Required><br><hr>
   <button type="submit" class="btn btn-primary">Post</button>
@@ -70,7 +70,7 @@
 
 <div class="checkout">
     
-  <div class="checkout__right" style="padding-right:10%;">
+  <div class="checkout__right" id="friend-sidebar" style="padding-right:10%;">
     <h5 class="checkout_title">Your</h5>
     <h2 class="checkout__name">Friends</h2>
     <ul class="other_option">
@@ -89,12 +89,16 @@
         </div>
     </ul>
   </div>
+ 
+
+
+
   <div class="checkout_left">
     <div>
       <h3 style="margin-top: 80px;">Your POSTS<hr></h3>
     </div>
     {% for post in post_data %}
-    <div class="card my-5" style="width: 20rem;">
+    <div class="card my-5" id="photo-card">
           <img src="{{post.post_image.url}}" class="card-img-top" alt="...">
           <div class="card-body">
             <p class="card-text">{{post.post_title}}</p><hr>
@@ -146,8 +150,27 @@ img.user-image-class-friend-pic { width: 40px; }
 img.user-image-class-friend-pic { width: 40px; }
 }
 img.user-image-class-friend-pic { height: 40px; }
+
+@media screen and (max-width: 799px) {
+   #post_title {
+       width:220px;
+   }
+   #friend-sidebar {
+     display:none;
+   }
+   #photo-card {
+     width:18rem;
+   }
+}
+
+@media screen and (min-width: 799px) {
+  #photo-card {
+    width:20rem;
+  }
+}
+
 </style>
-</style>
+
 {% endblock body %}
   </body>
 </html>

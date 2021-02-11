@@ -19,15 +19,16 @@
     <a class="navbar-brand mx-3" style="color: azure;" href="/">Facebook</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+      <span class="navbar-toggler-icon" style="color:white;">=</span>
     </button>
+    
+
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">
     <form class="form-inline my-2 my-lg-0" method='get' action="/search">
       <input class="form-control mr-sm-2 px-5" type="search" placeholder="Search" aria-label="Search" name="search"
         id="search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
-
-    <div class="collapse navbar-collapse " id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         {% if user.is_authenticated %}
         <li class="nav-item active">
@@ -94,26 +95,32 @@
     border: 1px solid silver;">
 
 
-    <div style="display:flex; border: 1px solid">
+    <div style="border: 1px solid" id="user-information">
       ` <a href="{{data.img.url}}"><img src="{{data.img.url}}" alt="..." class="user-image rounded d-block my-2"></a>
       <h3 class="font-italic"
         style="margin-top: 20px; margin-left: 20px; margin-bottom:33px; border-bottom:1px solid silver">{{data.user}}
       </h3>
         {% if current_user in check_friend_request and user not in check_friend %}
           <button
-              style="margin-left:170px; height:38px; margin-top:23px;" class="btn btn-primary">Friend
+              style="margin-left:170px; margin-top:23px;" class="btn btn-primary">Friend
               Request sent
           </button>
+          <a href="{% url 'cancel_friend_request' data.user.id %}">
+          <button
+              style="margin-left:30px; margin-top:23px;" class="btn btn-danger">Cancel Friend
+              Request
+          </button>
+          </a>
         {% elif user not in check_friend%}
           <a href="{% url 'add_friend' data.user.id %}">
           <button
-              style="margin-left:170px; height:38px; margin-top:23px;" class="btn btn-danger">Send Friend
+              style="margin-top:23px;" id="for-friend-request" class="btn btn-danger">Send Friend
               Request
           </button>
           </a>
         {% else %}
           <button
-              style="margin-left:170px; height:38px; margin-top:23px;" class="btn btn-info">Your Friend
+              style="margin-top:23px;" id="your-friend" class="btn btn-info">Your Friend
           </button>
         {% endif %}
     </div>
@@ -124,7 +131,7 @@
 
   <div class="checkout">
 
-    <div class="checkout__right" style="padding-right:10%;">
+    <div class="checkout__right" id="friend-section" style="padding-right:10%;">
       <h5 class="checkout_title"></h5>
       <h2 class="checkout__name">Friends</h2>
       <ul class="other_option">
@@ -148,7 +155,7 @@
         </h3>
       </div>
       {% for po in alldata %}
-      <div class="card my-5" style="width: 20rem;">
+      <div class="card my-5" id="othe-user-information">
         <img src="{{po.post_image.url}}" class="card-img-top" alt="...">
         <div class="card-body">
           <p class="card-text">{{po.post_title}}</p>
@@ -167,6 +174,8 @@
             </p>
         </div>
       </div>
+      {% empty %}
+        <h4 class="lead">No Post</h4>
       {% endfor %}
     </div>
     
@@ -235,6 +244,40 @@
     img.user-image-class-friend-pic { width: 40px; }
     }
     img.user-image-class-friend-pic { height: 40px; }
+
+
+    @media screen and (max-width: 799px) {
+      #friend-section{
+        display:none;
+      }
+      #user-information{
+        display:block;
+      }
+      #for-friend-request{
+        margin-left:10px;
+      }
+      #your-friend{
+        margin-left:10px;
+      }
+      #othe-user-information{
+        width:18rem;
+      }
+    }
+
+    @media screen and (min-width: 799px) {
+      #user-information{
+        display:flex;
+      }
+      #for-friend-request{
+        margin-left:170px;
+      }
+      #your-friend{
+        margin-left:170px;
+      }
+      #othe-user-information{
+        width:20rem;
+      }
+    }
   </style>
 </body>
 

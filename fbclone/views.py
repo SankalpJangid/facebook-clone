@@ -55,6 +55,7 @@ def home(request):
 
     profile_pic = ProfilePic.objects.filter(user__in=user_specific_post)
     user_image = ProfilePic.objects.filter(user=request.user)
+    print(my_generated_post_list)
     if request.user in checkAnyMessage:
         message_receiving = Message.objects.filter(message_receiver=request.user)
         notification_number = message_receiving.count()
@@ -262,7 +263,7 @@ def blogPost(request,id):
         check_friend_request.append(str(i))
 
     print(check_friend_request)
-
+   
     current_user = str(request.user)
     user_image = ProfilePic.objects.filter(user=request.user)
 
@@ -357,15 +358,35 @@ def Remove_friend(request,id):
     return redirect('profile')
 
 
+def cancel_friend(request,id):
+    user1 = request.user
+    user2 = User.objects.get(id=id)
+    friend = Friend.objects.filter(sender=user1, receiver=user2) or Friend.objects.filter(sender=user2, receiver=user1)
+    friend.delete()
+    messages.success(request,"friend request Declined")
+    return redirect('friendRequest')
+
+def cancel_friend_request(request,id):
+    user1 = request.user
+    user2 = User.objects.get(id=id)
+    friend = Friend.objects.filter(sender=user1, receiver=user2) or Friend.objects.filter(sender=user2, receiver=user1)
+    friend.delete()
+    messages.success(request,"friend request Canceled")
+    return redirect(f"/afterSearch/{id}")
+
+
 def chat(request,id): 
     print(User.objects.get(id=id))
+    user1 = request.user
     user2 = User.objects.get(id=id)
     message_sending, created = Message.objects.get_or_create(message_sender=request.user, message_receiver=user2)
     message_receiving, created = Message.objects.get_or_create(message_sender=user2, message_receiver=request.user)
     profile_picture = ProfilePic.objects.get(user=user2)
     user_image = ProfilePic.objects.filter(user=request.user)
+    friend = Friend.objects.filter(sender=user1, receiver=user2) or Friend.objects.filter(sender=user2, receiver=user1)
+    print(friend)
 
-    context = {'id':id, 'message_sending':message_sending, 'message_receiving':message_receiving, 'user2':user2, 'profile_picture':profile_picture}
+    context = {'id':id, 'message_sending':message_sending, 'message_receiving':message_receiving, 'user2':user2, 'profile_picture':profile_picture, 'friend':friend, 'user_image':user_image}
     return render(request, "chat.html", context)
 
 
@@ -403,7 +424,7 @@ def likes(request, sno, id):
     get_post = Posts.objects.get(sno=sno)
     get_post.post_likes.add(request.user)
     print(id)
-    return HttpResponseRedirect(reverse('afterSearch', args=[id]))
+    return redirect("/")
 
 def self_like(request,sno):
     get_post = Posts.objects.get(sno=sno)
@@ -416,5 +437,4 @@ def common_like(request, sno):
     data = {
         'likes':get_post.post_likes.all().count()
     }
-    return JsonResponse(data, safe=False)
-    return HttpResponseRedirect(reverse('home'))
+    return redirect("/")

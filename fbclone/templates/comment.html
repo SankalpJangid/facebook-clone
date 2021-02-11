@@ -17,14 +17,15 @@
 <nav class="navbar navbar-expand-lg fixed-top">
   <a class="navbar-brand mx-3" style="color: azure;" href="/">Facebook</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+    <span class="navbar-toggler-icon" style="color:white;">=</span>
   </button>
+  
+
+  <div class="collapse navbar-collapse " id="navbarSupportedContent">
   <form class="form-inline my-2 my-lg-0" method='get' action="/search">
     <input class="form-control mr-sm-2 px-5" type="search" placeholder="Search" aria-label="Search" name="search" id="search">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
   </form>
-
-  <div class="collapse navbar-collapse " id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
     {% if user.is_authenticated %}
       <li class="nav-item active">
@@ -73,7 +74,7 @@
   </button>
 </div>
 {% endfor %}
-    <div class="card" style="width: 20rem; margin-left:30%;margin-top: 74px;">
+    <div class="card" style="width: 20rem;margin-top: 74px;" id="PostSize">
         <img src="{{post.post_image.url}}" class="card-img-top" alt="...">
         <div class="card-body">
           <p class="card-text">{{post.post_title}}</p>
@@ -84,8 +85,7 @@
 
           <div class="car card-body" style="
                 width: 60%;
-                margin-left: 200px;
-            ">
+            " id="commentPost">
             <div class="my-3">
               {% if user.is_authenticated %}
               <form action="/postComment" method="post">
@@ -219,6 +219,30 @@ img.user-image-class { width: 20px; }
 img.user-image-class { width: 20px; }
 }
 img.user-image-class { height: auto; }
+
+
+@media screen and (max-width: 799px) {
+   #commentPost {
+       margin-left:20%;
+   }
+}
+@media screen and (min-width: 1081px) {
+  #commentPost {
+    margin-left:200px;
+  }
+}
+
+@media screen and (max-width: 799px) {
+   #PostSize {
+       margin-left:12%;
+   }
+}
+@media screen and (min-width: 1081px) {
+  #PostSize {
+    margin-left:30%;
+  }
+}
+
 </style>
 </body>
 </html>

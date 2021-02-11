@@ -26,6 +26,7 @@ class Posts(models.Model):
 class Friend(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="receiver")
+    chat = models.AutoField(primary_key=True)
     
     def __str__(self):
         return str(self.sender)

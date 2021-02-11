@@ -1,12 +1,25 @@
 {% extends 'allbasefile.html' %}
 {% block body %}
-    <div style="margin-top: 100px; margin-left: 400px;">
+    <div style="margin-top: 100px;" id="friend-request-page">
         <h1 style="margin-bottom:20px;">Friend Requests:</h1>
         {% for friend in request_check %}
             {% if friend.sender not in check_friend %}
-                <a href="{% url 'accept_friend' friend.sender.id %}"><button class ="btn btn-info">accept {{friend.sender}} request</button></a><br><br>
+                <h4 class="mr-2">{{friend.sender}} <a href="{% url 'accept_friend' friend.sender.id %}"><button class ="btn btn-info">accept</button></a><a href="{% url 'cancel_friend' friend.sender.id %}" class="btn btn-danger ml-2">Decline</a></h4><br><br>
             {% endif %}
         {% endfor %}
     </div>
+
+<style>
+@media screen and (max-width:799px){
+    #friend-request-page{
+        margin-left:20px;
+    }
+}
+@media screen and (min-width:799px){
+    #friend-request-page{
+        margin-left:400px;
+    }
+}
+</style>
 {% endblock body %}
 

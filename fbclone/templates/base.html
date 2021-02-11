@@ -9,14 +9,15 @@
   </button>
 </div>
 {% endfor %}
-<div class="checkout">
-  <div class="checkout__right" style="padding:5%;">
-    <h5 class="checkout_title">menu</h5>
-    <h2 class="checkout__name">Chat</h2>
+
+<div class="checkout" >
+  <div class="checkout__right" style="padding:5%;" id='sidebar'>
+    <h5 class="checkout_title">More</h5>
+    <h2 class="checkout__name">Options</h2><br>
     <ul class="other_option">
-      <a href="#">hi</a><br>
-      <a href="#">hi</a><br>
-      <a href="#">hi</a><br>
+      <a href="/profile"><p class="text-dark font-weight-bold lead">Profile Page</p></a><hr>
+      <a href="/friendRequest"><p class="text-dark font-weight-bold lead">Requests</p></a><hr>
+      <a href="/logout"><p class="text-dark font-weight-bold lead">Logout</p></a><hr>
       {% comment %} <a href="#">{{message_receiving}} {{message_receiving.message_field}} {{message_receiving.message_sender}}</a><br> {% endcomment %}
     </ul>
   </div>
@@ -50,6 +51,7 @@
         </div>
     </div> {% endcomment %}
     {% for data in my_generated_post_list %}
+    
     <div class="card my-5" style="width: 20rem;"> 
           <div class="container">
           <h6 style="border-bottom:1px solid silver; padding-bottom:5px"><small>Posted by</small></h6>
@@ -57,7 +59,7 @@
           <div class="container" style="display:flex">
           {% for image in my_data_profile_pic %}
             {% if image.user == data.post_user%}
-              <img src="{{image.img.url}}" alt="" class="user-image-class rounded d-block my-2">
+              <img src="{{image.img.url}}" alt="" class="user-image-class rounded d-block my-2 rounded-circle">
             {% endif %}
           {% endfor %}
         <a href="{% url 'afterSearch' data.post_user.id %}" class="text-dark"><h3 style="margin-top:8px">{{data.post_user}}</h3></a>
@@ -81,10 +83,12 @@
             
           </div>
     </div>
-      
+    {% empty %}
+      <p class="lead my-5">Add Some Friend to see their Post.</p><hr>
+      <p>To add your friend just search their name.</p>
     {% endfor %} 
   </div>
-  <div class="checkout__ri" style="
+  <div class="checkout__ri" id="second-sidebar" style="
     height: 76vh;
     overflow-y: auto;
 ">
@@ -99,7 +103,7 @@
     </div>
     <div>
     {% for fr in new_friends %}
-        <a href="afterSearch/{{fr.id}}"><h4 style="padding-left:10px; padding-top:8px;">{{fr}}</a><a href="chat/{{fr.id}}"><button class="btn-sm btn btn-primary" type="button" style="margin-left:10px;">chat</button></a></h4>
+        <a href="afterSearch/{{fr.id}}"><h4 style="padding-left:10px; padding-top:8px;">{{fr}}</a><a href="chats/{{fr.id}}"><button class="btn-sm btn btn-primary" type="button" style="margin-left:10px;">chat</button></a></h4>
           {% comment %} <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
             Button
           </button>
@@ -133,6 +137,20 @@ img.user-image-class { width: 40px; }
 img.user-image-class { width: 40px; }
 }
 img.user-image-class { height: 40px; }
+
+@media screen and (max-width: 799px) {
+   #sidebar {
+       display:none;
+   }
+}
+
+@media screen and (max-width: 799px) {
+   #second-sidebar {
+       display:none;
+   }
+}
+
+
 </style>
 
 {% endblock body %}
